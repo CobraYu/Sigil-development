@@ -164,6 +164,13 @@ public:
      */
     HTMLResource *CreateEmptyHTMLFile(HTMLResource *resource);
 
+	/**
+	* Creates a new HTMLResource file with a basic XHTML structure 
+	* inserted after the given resource to support fullscreen.
+	* The file on disk has only placeholder text.
+	*/
+	HTMLResource *CreateFullImageHTMLFile(HTMLResource *resource);
+
     /**
      * Creates a new CSSResource file with no stored data.
      * The file on disk is empty.
