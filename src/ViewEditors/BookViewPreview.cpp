@@ -240,10 +240,11 @@ bool BookViewPreview::FindNext(const QString &search_regex,
                                bool check_spelling,
                                bool ignore_selection_offset,
                                bool wrap,
-                               bool selected_text)
+                               bool selected_text,
+							   bool exclude_html_tag)
 {
     SearchTools search_tools = GetSearchTools();
-    return FindNext(search_tools, search_regex, search_direction, check_spelling, ignore_selection_offset, wrap, selected_text);
+    return FindNext(search_tools, search_regex, search_direction, check_spelling, ignore_selection_offset, wrap, selected_text, exclude_html_tag);
 }
 
 bool BookViewPreview::FindNext(SearchTools &search_tools,
@@ -252,8 +253,8 @@ bool BookViewPreview::FindNext(SearchTools &search_tools,
                                bool check_spelling,
                                bool ignore_selection_offset,
                                bool wrap,
-                               bool selected_text
-                              )
+                               bool selected_text,
+                               bool exclude_html_tag)
 {
     if (check_spelling) {
         QMessageBox::critical(this, tr("Unsupported"), tr("Spellcheck mode is not supported in Book View at this time.  Switch to Code View."));
@@ -312,20 +313,20 @@ bool BookViewPreview::FindNext(SearchTools &search_tools,
     return false;
 }
 
-int BookViewPreview::Count(const QString &search_regex, Searchable::Direction direction, bool wrap, bool selected_text)
+int BookViewPreview::Count(const QString &search_regex, Searchable::Direction direction, bool wrap, bool selected_text, bool exclude_html_tag)
 {
     // Spell check not actually used
     SPCRE *spcre = PCRECache::instance()->getObject(search_regex);
     return spcre->getEveryMatchInfo(GetSearchTools().fulltext).count();
 }
 
-bool BookViewPreview::ReplaceSelected(const QString &search_regex, const QString &replacement, Searchable::Direction direction, bool keep_selection)
+bool BookViewPreview::ReplaceSelected(const QString &search_regex, const QString &replacement, Searchable::Direction direction, bool keep_selection, bool exclude_html_tag)
 {
     QMessageBox::critical(this, tr("Unsupported"), tr("Replace is not supported in this view. Switch to Code View."));
     return false;
 }
 
-int BookViewPreview::ReplaceAll(const QString &search_regex, const QString &replacement, Searchable::Direction direction, bool wrap, bool selected_text)
+int BookViewPreview::ReplaceAll(const QString &search_regex, const QString &replacement, Searchable::Direction direction, bool wrap, bool selected_text, bool exclude_html_tag)
 {
     QMessageBox::critical(this, tr("Unsupported"), tr("Replace All for the current file is not supported in this view. Switch to Code View."));
     return 0;

@@ -486,7 +486,7 @@ void BookBrowser::AddNewFullImage()
 	QStringList selected_files;
 	// Get just images, not svg files.
 	QList<Resource *> image_resources = m_Book->GetFolderKeeper()->GetResourceListByType(Resource::ImageResourceType);
-	QString title = tr("Add Cover");
+	QString title = tr("Add Full Image");
 	SelectFiles select_files(title, image_resources, QString(), this);
 
 	if (select_files.exec() == QDialog::Accepted) {
@@ -507,9 +507,6 @@ void BookBrowser::AddNewFullImage()
 	}
 	QString image_filename = selected_files.first();
 
-	//QApplication::setOverrideCursor(Qt::WaitCursor);
-
-
 	Resource *current_resource = GetCurrentResource();
 	HTMLResource *current_html_resource = qobject_cast<HTMLResource *>(current_resource);
 	HTMLResource *new_html_resource = m_Book->CreateFullImageHTMLFile(current_html_resource);
@@ -517,22 +514,9 @@ void BookBrowser::AddNewFullImage()
 
 	try {
 		Resource *image_resource = m_Book->GetFolderKeeper()->GetResourceByFilename(image_filename);
-		/*
-		// Set cover semantics
-		if (version.startsWith('3')) {
-			NavProcessor navproc(m_Book->GetOPF()->GetNavResource());
-			navproc.AddLandmarkCode(html_cover_resource, "cover", false);
-		}
-		m_Book->GetOPF()->AddGuideSemanticCode(html_cover_resource, "cover", false);
-		*/
 
 		ImageResource *image_type_resource = qobject_cast<ImageResource *>(image_resource);
 		if (image_type_resource) {
-			/*
-			if (!m_Book->GetOPF()->IsCoverImage(image_type_resource)) {
-				m_Book->GetOPF()->SetResourceAsCoverImage(image_type_resource);
-			}
-			*/
 			// Add the filename and dimensions of the image to the HTML source.
 			QString image_relative_path = "../" + image_resource->GetRelativePathToOEBPS();
 			QImage img(image_resource->GetFullPath());
@@ -543,15 +527,6 @@ void BookBrowser::AddNewFullImage()
 			text.replace("SGC_IMAGE_WIDTH", width);
 			text.replace("SGC_IMAGE_HEIGHT", height);
 			new_html_resource->SetText(text);
-
-			/*
-			// Finally, if epub3 update the html resource manifest properties
-			if (version.startsWith('3')) {
-				QList<Resource*> resources_to_update;
-				resources_to_update.append(html_cover_resource);
-				m_Book->GetOPF()->UpdateManifestProperties(resources_to_update);
-			}
-			*/
 		}
 		else {
 			Utility::DisplayStdErrorDialog(tr("Unexpected error. Only image files can be used for the cover."));

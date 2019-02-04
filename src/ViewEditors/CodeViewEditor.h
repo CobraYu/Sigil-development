@@ -225,20 +225,23 @@ public:
                   bool misspelled_words = false,
                   bool ignore_selection_offset = false,
                   bool wrap = true,
-                  bool selected_text = false);
+                  bool selected_text = false,
+				  bool exclude_html_tag = false);
 
-    int Count(const QString &search_regex, Searchable::Direction direction, bool wrap, bool selected_text = false);
+    int Count(const QString &search_regex, Searchable::Direction direction, bool wrap, bool selected_text = false, bool exclude_html_tag = false);
 
     bool ReplaceSelected(const QString &search_regex,
                          const QString &replacement,
                          Searchable::Direction direction = Searchable::Direction_Down,
-                         bool replace_current = false);
+                         bool replace_current = false,
+						 bool exclude_html_tag = false);
 
     int ReplaceAll(const QString &search_regex,
                    const QString &replacement,
                    Searchable::Direction direction,
                    bool wrap,
-                   bool selected_text = false);
+                   bool selected_text = false,
+				   bool exclude_html_tag = false);
 
     QString GetSelectedText();
 
@@ -718,6 +721,8 @@ private:
     QStringList GetUnmatchedTagsForBlock(const int &pos, const QString &text) const;
 
     void SelectAndScrollIntoView(int start_position, int end_position, Searchable::Direction direction, bool wrapped);
+
+	void MoveCursor(int start_position, int end_position, Searchable::Direction direction, bool wrapped);
 
     ///////////////////////////////
     // PRIVATE MEMBER VARIABLES
