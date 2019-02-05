@@ -751,7 +751,9 @@ int FindReplace::CountInFiles()
     return SearchOperations::CountInFiles(
                GetSearchRegex(),
                html_files,
-               SearchOperations::CodeViewSearch);
+               SearchOperations::CodeViewSearch,
+			   false,
+			   GetSearchMode() == FindReplace::SearchMode_Text);
 }
 
 
