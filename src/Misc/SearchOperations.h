@@ -53,7 +53,8 @@ public:
     static int ReplaceInAllFIles(const QString &search_regex,
                                  const QString &replacement,
                                  QList<Resource *> resources,
-                                 SearchType search_type);
+                                 SearchType search_type,
+								 bool exclude_html_tag = false);
 
 private:
 
@@ -77,12 +78,14 @@ private:
     static int ReplaceInFile(const QString &search_regex,
                              const QString &replacement,
                              Resource *resource,
-                             SearchType search_type);
+                             SearchType search_type,
+							 bool exclude_html_tag = false);
 
     static int ReplaceHTMLInFile(const QString &search_regex,
                                  const QString &replacement,
                                  HTMLResource *html_resource,
-                                 SearchType search_type);
+                                 SearchType search_type,
+								 bool exclude_html_tag);
 
     static int ReplaceTextInFile(const QString &search_regex,
                                  const QString &replacement,
