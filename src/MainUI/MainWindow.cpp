@@ -4856,7 +4856,9 @@ void MainWindow::ConnectSignalsToSlots()
 	QAction *p_Kai = new QAction(tr("Kai"), pGroup);
 	QAction *p_PMingLiU = new QAction(tr("PMingLiU"), pGroup);
 	p_Kai->setCheckable(true);
+	p_Kai->setIconText("Normal_Plus");
 	p_PMingLiU->setCheckable(true);
+	p_PMingLiU->setIconText("Normal_Plus");
 	menu->addAction(p_Kai);
 	menu->addAction(p_PMingLiU);
 	p_Kai->setChecked(true);
@@ -4871,7 +4873,9 @@ void MainWindow::ConnectSignalsToSlots()
 	QAction *span_Kai = new QAction(tr("Kai"), spanGroup);
 	QAction *span_PMingLiU = new QAction(tr("PMingLiU"), spanGroup);
 	span_Kai->setCheckable(true);
+	span_Kai->setIconText("Span_Plus");
 	span_PMingLiU->setCheckable(true);
+	span_PMingLiU->setIconText("Span_Plus");
 	menu->addAction(span_Kai);
 	menu->addAction(span_PMingLiU);
 	span_Kai->setChecked(true);
@@ -4886,7 +4890,9 @@ void MainWindow::ConnectSignalsToSlots()
 	QAction *div_Kai = new QAction(tr("Kai"), divGroup);
 	QAction *div_PMingLiU = new QAction(tr("PMingLiU"), divGroup);
 	div_Kai->setCheckable(true);
+	div_Kai->setIconText("Div_Plus");
 	div_PMingLiU->setCheckable(true);
+	div_PMingLiU->setIconText("Div_Plus");
 	menu->addAction(div_Kai);
 	menu->addAction(div_PMingLiU);
 	div_PMingLiU->setChecked(true);
@@ -5259,17 +5265,29 @@ void MainWindow::BreakTabConnections(ContentTab *tab)
 void MainWindow::updatePClassID(QAction* action)
 {
 	action->setChecked(true);
-	QMessageBox::about(NULL, "QAction", action->text());
+	//QMessageBox::about(NULL, "QAction", action->text());
+	FlowTab *flow_tab = GetCurrentFlowTab();
+	if (flow_tab) {
+		flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text());
+	}
 }
 
 void MainWindow::updateSpanClassID(QAction* action)
 {
 	action->setChecked(true);
+	FlowTab *flow_tab = GetCurrentFlowTab();
+	if (flow_tab) {
+		flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text());
+	}
 }
 
 void MainWindow::updateDivClassID(QAction* action)
 {
 	action->setChecked(true);
+	FlowTab *flow_tab = GetCurrentFlowTab();
+	if (flow_tab) {
+		flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text());
+	}
 }
 
 void MainWindow::updatePalette()

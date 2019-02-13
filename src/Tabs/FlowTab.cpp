@@ -1355,7 +1355,7 @@ void FlowTab::ChangeCasing(const Utility::Casing casing)
     }
 }
 
-void FlowTab::HeadingStyle(const QString &heading_type, bool preserve_attributes)
+void FlowTab::HeadingStyle(const QString &heading_type, bool preserve_attributes, const QString &class_id)
 {
     if (m_ViewState == MainWindow::ViewState_BookView) {
         QChar last_char = heading_type[ heading_type.count() - 1 ];
@@ -1366,11 +1366,11 @@ void FlowTab::HeadingStyle(const QString &heading_type, bool preserve_attributes
         } else if (heading_type == "Normal") {
             m_wBookView->FormatBlock("p", preserve_attributes);
         } else if (heading_type == "Normal_Plus") {
-			m_wBookView->FormatBlock("p", preserve_attributes);
+			m_wBookView->FormatBlock("p", preserve_attributes, class_id);
 		} else if (heading_type == "Span_Plus") {
-			m_wBookView->FormatBlock("span", preserve_attributes);
+			m_wBookView->FormatBlock("span", preserve_attributes, class_id);
 		} else if (heading_type == "Div_Plus") {
-			m_wBookView->FormatBlock("div", preserve_attributes);
+			m_wBookView->FormatBlock("div", preserve_attributes, class_id);
 		}
 
 
@@ -1383,11 +1383,11 @@ void FlowTab::HeadingStyle(const QString &heading_type, bool preserve_attributes
         } else if (heading_type == "Normal") {
             m_wCodeView->FormatBlock("p", preserve_attributes);
         } else if (heading_type == "Normal_Plus") {
-			m_wCodeView->FormatBlock("p", preserve_attributes);
+			m_wCodeView->FormatBlock("p", preserve_attributes, class_id);
 		} else if (heading_type == "Span_Plus") {
-			m_wCodeView->FormatBlock("span", preserve_attributes);
+			m_wCodeView->FormatBlock("span", preserve_attributes, class_id);
 		} else if (heading_type == "Div_Plus") {
-			m_wCodeView->FormatBlock("div", preserve_attributes);
+			m_wCodeView->FormatBlock("div", preserve_attributes, class_id);
 		}
     }
 }

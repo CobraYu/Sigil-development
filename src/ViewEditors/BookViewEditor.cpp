@@ -494,11 +494,48 @@ void BookViewEditor::SetWebPageModified(bool modified)
     m_WebPageModified = modified;
 }
 
-void BookViewEditor::FormatBlock(const QString &element_name, bool preserve_attributes)
+void BookViewEditor::FormatBlock(const QString &element_name, bool preserve_attributes, const QString &class_id)
 {
     if (element_name.isEmpty()) {
         return;
     }
+	if (class_id != QString() && element_name == "p") {
+		QString javascript = "var s = window.getSelection();"
+			"var r = s.getRangeAt(0);"
+			"var head = r.startContainer.parentElement;"
+			"var tail = r.endContainer.parentElement;"
+			"if (head == tail && (head.tagName == 'P' || head.tagName == 'p')){"
+			"head.setAttribute('class', '" + class_id + "'); }"
+			"else while (head != tail.nextElementSibling && head != null){"
+			"if (head.tagName == 'P' || head.tagName == 'p'){"
+			"head.setAttribute('class', '" + class_id + "'); }"
+			"head=head.nextElementSibling; }";
+		EvaluateJavascript(javascript);
+		emit contentsChangedExtra();
+		return;
+	}
+	else if (class_id != QString() && element_name == "span") {
+		QString javascript = "(function surroundSelection() {"
+			"var span = document.createElement('span');"
+			"span.setAttribute('class', '" + class_id + "');"
+			"if (window.getSelection) {"
+			"var sel = window.getSelection();"
+			"if (sel.rangeCount) {"
+			"var range = sel.getRangeAt(0).cloneRange();"
+			"range.surroundContents(span);"
+			"sel.removeAllRanges();"
+			"sel.addRange(range); } } })();";
+		EvaluateJavascript(javascript);
+		emit contentsChangedExtra();
+		return;
+	}
+	else if (class_id != QString() && element_name == "div") {
+		QString javascript = "var s=window.getSelection(),r=s.getRangeAt(0),head=r.startContainer.parentElement,tail=r.endContainer.parentElement,div=document.createElement('div');for(div.setAttribute('class','" + class_id + "');null!=head&&null!=tail&&head!=tail;)if('P'==head.tagName||'p'==head.tagName){var temp=head;head=head.nextElementSibling,temp.parentNode.insertBefore(div,temp),div.appendChild(temp)}head==tail&&(head.parentNode.insertBefore(div,head),div.appendChild(head));";
+		EvaluateJavascript(javascript);
+		emit contentsChangedExtra();
+		return;
+	}
+
 
     QString preserve = preserve_attributes ? "true" : "false";
     QString javascript =  c_GetBlock % c_FormatBlock %

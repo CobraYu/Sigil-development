@@ -2452,7 +2452,7 @@ bool CodeViewEditor::ExecuteCaretUpdate(bool default_to_top)
 }
 
 
-void CodeViewEditor::FormatBlock(const QString &element_name, bool preserve_attributes)
+void CodeViewEditor::FormatBlock(const QString &element_name, bool preserve_attributes, const QString &class_id)
 {
     if (element_name.isEmpty()) {
         return;
@@ -2529,17 +2529,25 @@ void CodeViewEditor::FormatBlock(const QString &element_name, bool preserve_attr
         // Special case for the body tag or clicked past a previous closing block tag
         // In these situations we just insert html around our selection.
 		// Special case for element_name == "span"
-        if (tag_name == "body" || is_closing_tag || element_name == "span") {
-            InsertHTMLTagAroundSelection(element_name, "/" % element_name);
+        if (tag_name == "body" || is_closing_tag || element_name == "span") {	
+			if (class_id != QString())
+				InsertHTMLTagAroundSelection(element_name, "/" % element_name, "class=\"" % class_id % "\"");
+			else
+				InsertHTMLTagAroundSelection(element_name, "/" % element_name);
             return;
         }
-
+		
         // If we got to here we know we have an opening block tag we shall replace.
         opening_tag_start = previous_tag_index;
         // Grab any attributes applied to this opening tag
         int attribute_start_index = tag_name_index + mo.capturedLength();
         opening_tag_end = text.indexOf('>', attribute_start_index) + 1;
         opening_tag_attributes = text.mid(attribute_start_index, opening_tag_end - attribute_start_index - 1).trimmed();
+		if (class_id != QString()) {
+			opening_tag_attributes = "class=\"" % class_id % "\" " % opening_tag_attributes;
+			opening_tag_attributes = opening_tag_attributes.trimmed();
+		}
+			
         // Now find the closing tag for this block.
         QRegularExpression closing_tag_search("</\\s*" % tag_name % "\\s*>", QRegularExpression::CaseInsensitiveOption);
         QRegularExpressionMatch closing_tag_search_mo = closing_tag_search.match(text, opening_tag_end);

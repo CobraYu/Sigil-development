@@ -169,7 +169,7 @@ public:
      * @param element_name The name of the element to format the block to.
      * @param preserve_attributes Whether to keep any existing attributes on the previous block tag.
      */
-    void FormatBlock(const QString &element_name, bool preserve_attributes);
+    void FormatBlock(const QString &element_name, bool preserve_attributes, const QString &class_id = QString());
 
     /**
      * Returns the name of the element the caret is located in.

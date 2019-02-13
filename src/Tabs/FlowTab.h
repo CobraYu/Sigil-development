@@ -243,7 +243,7 @@ public slots:
 
     void ChangeCasing(const Utility::Casing casing);
 
-    void HeadingStyle(const QString &heading_type, bool preserve_attributes);
+    void HeadingStyle(const QString &heading_type, bool preserve_attributes, const QString &class_id=QString(""));
 
     void AddToIndex();
     bool MarkForIndex(const QString &title);
