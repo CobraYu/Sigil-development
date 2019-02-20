@@ -97,6 +97,10 @@ static QString KEY_SPECIAL_CHARACTER_FONT_SIZE = SETTINGS_GROUP + "/" + "special
 static QString KEY_MAIN_MENU_ICON_SIZE = SETTINGS_GROUP + "/" + "main_menu_icon_size";
 static QString KEY_CLIPBOARD_HISTORY_LIMIT = SETTINGS_GROUP + "/" + "clipboard_history_limit";
 
+static QString KEY_PARAGRAPH_CLASS_IDS = SETTINGS_GROUP + "/" + "paragraph_class_ids";
+static QString KEY_SPAN_CLASS_IDS = SETTINGS_GROUP + "/" + "span_class_ids";
+static QString KEY_DIV_CLASS_IDS = SETTINGS_GROUP + "/" + "div_class_ids";
+
 SettingsStore::SettingsStore()
     : QSettings(Utility::DefinePrefsDir() + "/sigil.ini", QSettings::IniFormat)
 {
@@ -612,4 +616,43 @@ void SettingsStore::clearSettingsGroup()
     while (!group().isEmpty()) {
         endGroup();
     }
+}
+
+void SettingsStore::setParagraphClassIDs(const QString &pIDs)
+{
+	clearSettingsGroup();
+	setValue(KEY_PARAGRAPH_CLASS_IDS, pIDs);
+}
+
+void SettingsStore::setSpanClassIDs(const QString &sIDs)
+{
+	clearSettingsGroup();
+	setValue(KEY_SPAN_CLASS_IDS, sIDs);
+}
+
+void SettingsStore::setDivClassIDs(const QString &dIDs)
+{
+	clearSettingsGroup();
+	setValue(KEY_DIV_CLASS_IDS, dIDs);
+}
+
+QString SettingsStore::divClassIDs()
+{
+	clearSettingsGroup();
+	QString dIDs = value(KEY_DIV_CLASS_IDS, QString("{}")).toString();	// Ensure that any clipboard history limit gleaned from the ini file is between 0 and CLIPBOARD_HISTORY_MAX
+	return dIDs;
+}
+
+QString SettingsStore::spanClassIDs()
+{
+	clearSettingsGroup();
+	QString sIDs = value(KEY_SPAN_CLASS_IDS, QString("{}")).toString();	// Ensure that any clipboard history limit gleaned from the ini file is between 0 and CLIPBOARD_HISTORY_MAX
+	return sIDs;
+}
+
+QString SettingsStore::paragraphClassIDs()
+{
+	clearSettingsGroup();
+	QString pIDs = value(KEY_PARAGRAPH_CLASS_IDS, QString("{}")).toString();	// Ensure that any clipboard history limit gleaned from the ini file is between 0 and CLIPBOARD_HISTORY_MAX
+	return pIDs;
 }

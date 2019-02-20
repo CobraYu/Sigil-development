@@ -73,3 +73,8 @@ while (head != null && tail != null && head != tail){
 		div.appendChild(temp);
 	}
 }
+if(head==tail){
+	head.parentNode.insertBefore(div, head);
+	div.appendChild(head);	
+}
+	

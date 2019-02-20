@@ -144,6 +144,8 @@ set( DIALOG_FILES
     Dialogs/SelectIndexTitle.h
     Dialogs/SelectFiles.cpp
     Dialogs/SelectFiles.h
+    Dialogs/SetClassID.cpp
+    Dialogs/SetClassID.h	
     Dialogs/MetaEditor.cpp
     Dialogs/MetaEditor.h
     Dialogs/TreeItem.cpp
@@ -431,6 +433,7 @@ set( UI_FILES
     Form_Files/SelectId.ui
     Form_Files/SelectIndexTitle.ui
     Form_Files/SelectFiles.ui
+    Form_Files/SetClassID.ui	
     Form_Files/MetaEditor.ui 
     Form_Files/AddMetadata.ui
     Form_Files/AddSemantics.ui 

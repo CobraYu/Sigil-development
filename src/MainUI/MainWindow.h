@@ -1028,6 +1028,11 @@ private:
     QStringList m_pluginList;
     bool m_SaveCSS;
 
+	const int m_menuLength = 8;
+	QString m_paragraphClassIDs;
+	QString m_spanClassIDs;
+	QString m_divClassIDs;
+
     /**
      * Holds all the widgets Qt Designer created for us.
      */

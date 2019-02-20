@@ -65,6 +65,7 @@
 #include "Dialogs/SelectHyperlink.h"
 #include "Dialogs/SelectId.h"
 #include "Dialogs/SelectIndexTitle.h"
+#include "Dialogs/SetClassID.h"
 #include "Exporters/ExportEPUB.h"
 #include "Exporters/ExporterFactory.h"
 #include "Importers/ImporterFactory.h"
@@ -3177,7 +3178,7 @@ void MainWindow::SetStateActionsRawView()
 	ui.actionHeadingNormal_Plus->setEnabled(false);
 	ui.actionHeadingSpan_Plus->setEnabled(false);
 	ui.actionHeadingDiv_Plus->setEnabled(false);
-	ui.actionColorDialog->setEnabled(false);
+	ui.actionColorDialog->setEnabled(true);
 
     ui.actionCasingLowercase  ->setEnabled(true);
     ui.actionCasingUppercase  ->setEnabled(true);
@@ -3656,6 +3657,35 @@ void MainWindow::ReadSettings()
     if (CustomPreviewStylesheetInfo.exists() && CustomPreviewStylesheetInfo.isFile() && CustomPreviewStylesheetInfo.isReadable()) {
         web_settings->setUserStyleSheetUrl(QUrl::fromLocalFile(CustomPreviewStylesheetInfo.absoluteFilePath()));
     }
+	
+	m_paragraphClassIDs = settings.paragraphClassIDs();
+	if (m_paragraphClassIDs == "{}") {
+		QJsonDocument json;
+		QJsonObject object;
+		for(int i=0; i < m_menuLength; i++)
+			object.insert(QString("example").append(QString::number(i)), QString("example").append(QString::number(i)));
+		json.setObject(object);
+		m_paragraphClassIDs = json.toJson(QJsonDocument::Compact);
+	}
+	m_spanClassIDs = settings.spanClassIDs();
+	if (m_spanClassIDs == "{}") {
+		QJsonDocument json;
+		QJsonObject object;
+		for (int i = 0; i < m_menuLength; i++)
+			object.insert(QString("example").append(QString::number(i)), QString("example").append(QString::number(i)));
+		json.setObject(object);
+		m_spanClassIDs = json.toJson(QJsonDocument::Compact);
+	}
+	m_divClassIDs = settings.divClassIDs();
+	if (m_divClassIDs == "{}") {
+		QJsonDocument json;
+		QJsonObject object;
+		for (int i = 0; i < m_menuLength; i++)
+			object.insert(QString("example").append(QString::number(i)), QString("example").append(QString::number(i)));
+		json.setObject(object);
+		m_divClassIDs = json.toJson(QJsonDocument::Compact);
+	}
+
 }
 
 
@@ -3682,6 +3712,11 @@ void MainWindow::WriteSettings()
     settings.endGroup();
     settings.setClipboardHistoryLimit(m_ClipboardHistoryLimit);
     settings.setViewState(m_ViewState);
+	
+	settings.setParagraphClassIDs(m_paragraphClassIDs);
+	settings.setSpanClassIDs(m_spanClassIDs);
+	settings.setDivClassIDs(m_divClassIDs);
+	
 }
 
 bool MainWindow::MaybeSaveDialogSaysProceed()
@@ -4853,15 +4888,34 @@ void MainWindow::ConnectSignalsToSlots()
 
 	QMenu *menu = new QMenu(tr("P Class ID"), this);
 	QActionGroup *pGroup = new QActionGroup(this);
-	QAction *p_Kai = new QAction(tr("Kai"), pGroup);
-	QAction *p_PMingLiU = new QAction(tr("PMingLiU"), pGroup);
-	p_Kai->setCheckable(true);
-	p_Kai->setIconText("Normal_Plus");
-	p_PMingLiU->setCheckable(true);
-	p_PMingLiU->setIconText("Normal_Plus");
-	menu->addAction(p_Kai);
-	menu->addAction(p_PMingLiU);
-	p_Kai->setChecked(true);
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_spanClassIDs.toUtf8());
+	QJsonObject jsonObject = jsonDocument.object();
+	int len = jsonObject.length();
+	QAction *pAction = new QAction[m_menuLength + 1];
+	QStringList keys = jsonObject.keys();
+	for (int i = 0; i < m_menuLength; i++) {
+		if (i < len) {
+			pAction[i].setActionGroup(pGroup);
+			pAction[i].setCheckable(true);
+			pAction[i].setIconText("Normal_Plus");
+			//pAction[i].setText(jsonObject.value(keys[i]).toString());
+			pAction[i].setText(keys[i]);
+			menu->addAction(pAction + i);
+			continue;
+		}
+		pAction[i].setActionGroup(pGroup);
+		pAction[i].setCheckable(true);
+		pAction[i].setIconText("Normal_Plus");
+		//pAction[i].setText(jsonObject.value(keys[i]).toString());
+		pAction[i].setText(QString("example").append(QString::number(i)));
+		menu->addAction(pAction + i);
+	}
+	menu->addSeparator();
+	pAction[m_menuLength].setActionGroup(pGroup);
+	pAction[m_menuLength].setCheckable(true);
+	pAction[m_menuLength].setIconText("Normal_Plus");
+	pAction[m_menuLength].setText(tr("custom"));
+	menu->addAction(pAction + m_menuLength);
 	ui.actionHeadingNormal_Plus->setMenu(menu);
 	connect(pGroup, SIGNAL(triggered(QAction*)), this, SLOT(updatePClassID(QAction*)));
 
@@ -5265,10 +5319,45 @@ void MainWindow::BreakTabConnections(ContentTab *tab)
 void MainWindow::updatePClassID(QAction* action)
 {
 	action->setChecked(true);
-	//QMessageBox::about(NULL, "QAction", action->text());
+	QMessageBox::about(NULL, "QAction", action->text());
 	FlowTab *flow_tab = GetCurrentFlowTab();
-	if (flow_tab) {
-		flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text());
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_paragraphClassIDs.toUtf8());
+	QJsonObject jsonObject = jsonDocument.object();
+	//QString json = jsonObject::fromJson()
+	if (action->text() == tr("custom")) {
+		SetClassID setClassId(m_paragraphClassIDs);
+		if (setClassId.exec() == QDialog::Accepted) {
+			setClassId.reject();
+		}
+		/* https://zhidao.baidu.com/question/624189423239297604.html
+		mEditText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(Constants.MAX_TEXT_INPUT_LENGTH) });
+		*/
+		/*
+		select_id(id, html_resource, m_Book, this);
+
+		if (select_id.exec() == QDialog::Accepted) {
+			QString selected_id = select_id.GetId();
+			QRegularExpression invalid_id("(^[^A-Za-z]|[^A-Za-z0-9_:\\.-])");
+			QRegularExpressionMatch mo = invalid_id.match(selected_id);
+
+			if (mo.hasMatch()) {
+				QMessageBox::warning(this, tr("Sigil"), tr("ID is invalid - must start with a letter, followed by letter number _ : - or ."));
+				return;
+			};
+
+			if (!flow_tab->InsertId(select_id.GetId())) {
+				QMessageBox::warning(this, tr("Sigil"), tr("You cannot insert an id at this position."));
+			}
+		}
+		*/
+	}
+	else if (flow_tab) {
+		if (jsonObject.value(action->text()).toString() != QString())
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, jsonObject.value(action->text()).toString()/*action->text()*/);
+		else if (action->text().indexOf("example") == 0)
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text()/*action->text()*/);
+		else
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes);
 	}
 }
 

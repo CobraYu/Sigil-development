@@ -232,6 +232,10 @@ public:
      */
     void clearAppearanceSettings();
 
+	QString paragraphClassIDs();
+	QString spanClassIDs();
+	QString divClassIDs();
+
 public slots:
 
     /**
@@ -353,6 +357,10 @@ public slots:
      * Set the number of clipboard history items to retain
      */
     void setClipboardHistoryLimit(int limit);
+
+	void setParagraphClassIDs(const QString &pIDs);
+	void setSpanClassIDs(const QString &sIDs);
+	void setDivClassIDs(const QString &dIDs);
 
 private:
     /**
