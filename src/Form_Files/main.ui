@@ -2346,9 +2346,7 @@
     <string>Normal Plus</string>
    </property>
    <property name="toolTip">
-    <string>&lt;p style=&quot;padding-top: 0.5em;&quot; &gt;&lt;b&gt;Paragraph&lt;/b&gt;&lt;/p&gt;
-
-&lt;p style=&quot;margin-left: 0.5em;&quot;&gt;Format paragraph as a normal paragraph with a class ID.&lt;/p&gt;</string>
+    <string notr="true">&lt;p&gt; with  class</string>
    </property>
   </action>
   <action name="actionHeadingSpan_Plus">
@@ -2363,9 +2361,7 @@
     <string>Span Plus</string>
    </property>
    <property name="toolTip">
-    <string>&lt;p style=&quot;padding-top: 0.5em;&quot; &gt;&lt;b&gt;Paragraph&lt;/b&gt;&lt;/p&gt;
-
-&lt;p style=&quot;margin-left: 0.5em;&quot;&gt;Format paragraph as a normal span with a class ID.&lt;/p&gt;</string>
+    <string notr="true">&lt;span&gt; with class</string>
    </property>
   </action>
   <action name="actionHeadingDiv_Plus">
@@ -2380,9 +2376,7 @@
     <string>Div Plus</string>
    </property>
    <property name="toolTip">
-    <string>&lt;p style=&quot;padding-top: 0.5em;&quot; &gt;&lt;b&gt;Div&lt;/b&gt;&lt;/p&gt;
-
-&lt;p style=&quot;margin-left: 0.5em;&quot;&gt;Format paragraph(s) as a normal div with a class ID.&lt;/p&gt;</string>
+    <string notr="true">&lt;div&gt; with class</string>
    </property>
   </action>
   <action name="actionColorDialog">
