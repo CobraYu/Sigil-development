@@ -3781,6 +3781,118 @@ void MainWindow::ResourcesAddedOrDeleted()
     }
 }
 
+void MainWindow::classIDChanged(QString tagName, QString json)
+{
+	if (tagName == "p") {
+		m_paragraphClassIDs = json;
+		QMenu *menu = new QMenu(tr("P Class ID"), this);
+		QActionGroup *pGroup = new QActionGroup(this);
+		QJsonDocument jsonDocument = QJsonDocument::fromJson(m_paragraphClassIDs.toUtf8());
+		QJsonObject jsonObject = jsonDocument.object();
+		int len = jsonObject.length();
+		QAction *pAction = new QAction[m_menuLength + 1];
+		QStringList keys = jsonObject.keys();
+		for (int i = 0; i < m_menuLength; i++) {
+			if (i < len) {
+				pAction[i].setActionGroup(pGroup);
+				pAction[i].setCheckable(true);
+				pAction[i].setIconText("Normal_Plus");
+				//pAction[i].setText(jsonObject.value(keys[i]).toString());
+				pAction[i].setText(keys[i]);
+				menu->addAction(pAction + i);
+				continue;
+			}
+			pAction[i].setActionGroup(pGroup);
+			pAction[i].setCheckable(true);
+			pAction[i].setIconText("Normal_Plus");
+			//pAction[i].setText(jsonObject.value(keys[i]).toString());
+			pAction[i].setText(QString("example").append(QString::number(i)));
+			menu->addAction(pAction + i);
+		}
+		menu->addSeparator();
+		pAction[m_menuLength].setActionGroup(pGroup);
+		pAction[m_menuLength].setCheckable(true);
+		pAction[m_menuLength].setIconText("Normal_Plus");
+		pAction[m_menuLength].setText(tr("custom"));
+		menu->addAction(pAction + m_menuLength);
+		ui.actionHeadingNormal_Plus->setMenu(menu);
+		connect(pGroup, SIGNAL(triggered(QAction*)), this, SLOT(updatePClassID(QAction*)));
+
+	}
+	else if(tagName == "span") {
+		m_spanClassIDs = json;
+		QMenu *menu = new QMenu(tr("Span Class ID"), this);
+		QActionGroup *pGroup = new QActionGroup(this);
+		QJsonDocument jsonDocument = QJsonDocument::fromJson(m_spanClassIDs.toUtf8());
+		QJsonObject jsonObject = jsonDocument.object();
+		int len = jsonObject.length();
+		QAction *pAction = new QAction[m_menuLength + 1];
+		QStringList keys = jsonObject.keys();
+		for (int i = 0; i < m_menuLength; i++) {
+			if (i < len) {
+				pAction[i].setActionGroup(pGroup);
+				pAction[i].setCheckable(true);
+				pAction[i].setIconText("Span_Plus");
+				//pAction[i].setText(jsonObject.value(keys[i]).toString());
+				pAction[i].setText(keys[i]);
+				menu->addAction(pAction + i);
+				continue;
+			}
+			pAction[i].setActionGroup(pGroup);
+			pAction[i].setCheckable(true);
+			pAction[i].setIconText("Span_Plus");
+			//pAction[i].setText(jsonObject.value(keys[i]).toString());
+			pAction[i].setText(QString("example").append(QString::number(i)));
+			menu->addAction(pAction + i);
+		}
+		menu->addSeparator();
+		pAction[m_menuLength].setActionGroup(pGroup);
+		pAction[m_menuLength].setCheckable(true);
+		pAction[m_menuLength].setIconText("Span_Plus");
+		pAction[m_menuLength].setText(tr("custom"));
+		menu->addAction(pAction + m_menuLength);
+		ui.actionHeadingSpan_Plus->setMenu(menu);
+		connect(pGroup, SIGNAL(triggered(QAction*)), this, SLOT(updateSpanClassID(QAction*)));
+
+
+	}
+	else if (tagName == "div") {
+		m_divClassIDs = json;
+		QMenu *menu = new QMenu(tr("Div Class ID"), this);
+		QActionGroup *pGroup = new QActionGroup(this);
+		QJsonDocument jsonDocument = QJsonDocument::fromJson(m_divClassIDs.toUtf8());
+		QJsonObject jsonObject = jsonDocument.object();
+		int len = jsonObject.length();
+		QAction *pAction = new QAction[m_menuLength + 1];
+		QStringList keys = jsonObject.keys();
+		for (int i = 0; i < m_menuLength; i++) {
+			if (i < len) {
+				pAction[i].setActionGroup(pGroup);
+				pAction[i].setCheckable(true);
+				pAction[i].setIconText("Div_Plus");
+				//pAction[i].setText(jsonObject.value(keys[i]).toString());
+				pAction[i].setText(keys[i]);
+				menu->addAction(pAction + i);
+				continue;
+			}
+			pAction[i].setActionGroup(pGroup);
+			pAction[i].setCheckable(true);
+			pAction[i].setIconText("Div_Plus");
+			//pAction[i].setText(jsonObject.value(keys[i]).toString());
+			pAction[i].setText(QString("example").append(QString::number(i)));
+			menu->addAction(pAction + i);
+		}
+		menu->addSeparator();
+		pAction[m_menuLength].setActionGroup(pGroup);
+		pAction[m_menuLength].setCheckable(true);
+		pAction[m_menuLength].setIconText("Div_Plus");
+		pAction[m_menuLength].setText(tr("custom"));
+		menu->addAction(pAction + m_menuLength);
+		ui.actionHeadingDiv_Plus->setMenu(menu);
+		connect(pGroup, SIGNAL(triggered(QAction*)), this, SLOT(updateDivClassID(QAction*)));
+	}
+}
+
 
 void MainWindow::CreateNewBook()
 {
@@ -4888,7 +5000,7 @@ void MainWindow::ConnectSignalsToSlots()
 
 	QMenu *menu = new QMenu(tr("P Class ID"), this);
 	QActionGroup *pGroup = new QActionGroup(this);
-	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_spanClassIDs.toUtf8());
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_paragraphClassIDs.toUtf8());
 	QJsonObject jsonObject = jsonDocument.object();
 	int len = jsonObject.length();
 	QAction *pAction = new QAction[m_menuLength + 1];
@@ -4921,7 +5033,41 @@ void MainWindow::ConnectSignalsToSlots()
 
 	connect(ui.actionHeadingSpan_Plus, SIGNAL(triggered()), m_headingMapper, SLOT(map()));
 	m_headingMapper->setMapping(ui.actionHeadingSpan_Plus, "Span_Plus");
-	
+
+	menu = new QMenu(tr("SPAN Class ID"), this);
+	pGroup = new QActionGroup(this);
+	jsonDocument = QJsonDocument::fromJson(m_spanClassIDs.toUtf8());
+	jsonObject = jsonDocument.object();
+	len = jsonObject.length();
+	pAction = new QAction[m_menuLength + 1];
+	keys = jsonObject.keys();
+	for (int i = 0; i < m_menuLength; i++) {
+		if (i < len) {
+			pAction[i].setActionGroup(pGroup);
+			pAction[i].setCheckable(true);
+			pAction[i].setIconText("Span_Plus");
+			//pAction[i].setText(jsonObject.value(keys[i]).toString());
+			pAction[i].setText(keys[i]);
+			menu->addAction(pAction + i);
+			continue;
+		}
+		pAction[i].setActionGroup(pGroup);
+		pAction[i].setCheckable(true);
+		pAction[i].setIconText("Span_Plus");
+		//pAction[i].setText(jsonObject.value(keys[i]).toString());
+		pAction[i].setText(QString("example").append(QString::number(i)));
+		menu->addAction(pAction + i);
+	}
+	menu->addSeparator();
+	pAction[m_menuLength].setActionGroup(pGroup);
+	pAction[m_menuLength].setCheckable(true);
+	pAction[m_menuLength].setIconText("Span_Plus");
+	pAction[m_menuLength].setText(tr("custom"));
+	menu->addAction(pAction + m_menuLength);
+	ui.actionHeadingSpan_Plus->setMenu(menu);
+	connect(pGroup, SIGNAL(triggered(QAction*)), this, SLOT(updateSpanClassID(QAction*)));
+
+	/*
 	menu = new QMenu(tr("Span Class ID"), this);
 	QActionGroup *spanGroup = new QActionGroup(this);
 	QAction *span_Kai = new QAction(tr("Kai"), spanGroup);
@@ -4935,11 +5081,44 @@ void MainWindow::ConnectSignalsToSlots()
 	span_Kai->setChecked(true);
 	ui.actionHeadingSpan_Plus->setMenu(menu);
 	connect(spanGroup, SIGNAL(triggered(QAction*)), this, SLOT(updateSpanClassID(QAction*)));
-
+	*/
 	connect(ui.actionHeadingDiv_Plus, SIGNAL(triggered()), m_headingMapper, SLOT(map()));
 	m_headingMapper->setMapping(ui.actionHeadingDiv_Plus, "Div_Plus");
 
 	menu = new QMenu(tr("Div Class ID"), this);
+	pGroup = new QActionGroup(this);
+	jsonDocument = QJsonDocument::fromJson(m_divClassIDs.toUtf8());
+	jsonObject = jsonDocument.object();
+	len = jsonObject.length();
+	pAction = new QAction[m_menuLength + 1];
+	keys = jsonObject.keys();
+	for (int i = 0; i < m_menuLength; i++) {
+		if (i < len) {
+			pAction[i].setActionGroup(pGroup);
+			pAction[i].setCheckable(true);
+			pAction[i].setIconText("Div_Plus");
+			//pAction[i].setText(jsonObject.value(keys[i]).toString());
+			pAction[i].setText(keys[i]);
+			menu->addAction(pAction + i);
+			continue;
+		}
+		pAction[i].setActionGroup(pGroup);
+		pAction[i].setCheckable(true);
+		pAction[i].setIconText("Div_Plus");
+		//pAction[i].setText(jsonObject.value(keys[i]).toString());
+		pAction[i].setText(QString("example").append(QString::number(i)));
+		menu->addAction(pAction + i);
+	}
+	menu->addSeparator();
+	pAction[m_menuLength].setActionGroup(pGroup);
+	pAction[m_menuLength].setCheckable(true);
+	pAction[m_menuLength].setIconText("Div_Plus");
+	pAction[m_menuLength].setText(tr("custom"));
+	menu->addAction(pAction + m_menuLength);
+	ui.actionHeadingDiv_Plus->setMenu(menu);
+	connect(pGroup, SIGNAL(triggered(QAction*)), this, SLOT(updateDivClassID(QAction*)));
+
+	/*
 	QActionGroup *divGroup = new QActionGroup(this);
 	QAction *div_Kai = new QAction(tr("Kai"), divGroup);
 	QAction *div_PMingLiU = new QAction(tr("PMingLiU"), divGroup);
@@ -4952,7 +5131,7 @@ void MainWindow::ConnectSignalsToSlots()
 	div_PMingLiU->setChecked(true);
 	ui.actionHeadingDiv_Plus->setMenu(menu);
 	connect(divGroup, SIGNAL(triggered(QAction*)), this, SLOT(updateDivClassID(QAction*)));
-
+	*/
 	connect(ui.actionColorDialog, SIGNAL(triggered()), this, SLOT(updatePalette()));
 
     // File
@@ -5319,37 +5498,16 @@ void MainWindow::BreakTabConnections(ContentTab *tab)
 void MainWindow::updatePClassID(QAction* action)
 {
 	action->setChecked(true);
-	QMessageBox::about(NULL, "QAction", action->text());
+	//QMessageBox::about(NULL, "QAction", action->text());
 	FlowTab *flow_tab = GetCurrentFlowTab();
 	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_paragraphClassIDs.toUtf8());
 	QJsonObject jsonObject = jsonDocument.object();
-	//QString json = jsonObject::fromJson()
 	if (action->text() == tr("custom")) {
-		SetClassID setClassId(m_paragraphClassIDs);
+		SetClassID setClassId("p", m_menuLength, m_paragraphClassIDs);
+		connect(&setClassId, SIGNAL(classIDChanged(QString, QString)), this, SLOT(classIDChanged(QString, QString)));
 		if (setClassId.exec() == QDialog::Accepted) {
-			setClassId.reject();
+			QMessageBox::about(NULL, "P Class ID", "Just modified!");
 		}
-		/* https://zhidao.baidu.com/question/624189423239297604.html
-		mEditText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(Constants.MAX_TEXT_INPUT_LENGTH) });
-		*/
-		/*
-		select_id(id, html_resource, m_Book, this);
-
-		if (select_id.exec() == QDialog::Accepted) {
-			QString selected_id = select_id.GetId();
-			QRegularExpression invalid_id("(^[^A-Za-z]|[^A-Za-z0-9_:\\.-])");
-			QRegularExpressionMatch mo = invalid_id.match(selected_id);
-
-			if (mo.hasMatch()) {
-				QMessageBox::warning(this, tr("Sigil"), tr("ID is invalid - must start with a letter, followed by letter number _ : - or ."));
-				return;
-			};
-
-			if (!flow_tab->InsertId(select_id.GetId())) {
-				QMessageBox::warning(this, tr("Sigil"), tr("You cannot insert an id at this position."));
-			}
-		}
-		*/
 	}
 	else if (flow_tab) {
 		if (jsonObject.value(action->text()).toString() != QString())
@@ -5364,18 +5522,48 @@ void MainWindow::updatePClassID(QAction* action)
 void MainWindow::updateSpanClassID(QAction* action)
 {
 	action->setChecked(true);
+	//QMessageBox::about(NULL, "QAction", action->text());
 	FlowTab *flow_tab = GetCurrentFlowTab();
-	if (flow_tab) {
-		flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text());
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_spanClassIDs.toUtf8());
+	QJsonObject jsonObject = jsonDocument.object();
+	if (action->text() == tr("custom")) {
+		SetClassID setClassId("span", m_menuLength, m_spanClassIDs);
+		connect(&setClassId, SIGNAL(classIDChanged(QString, QString)), this, SLOT(classIDChanged(QString, QString)));
+		if (setClassId.exec() == QDialog::Accepted) {
+			QMessageBox::about(NULL, "SPAN Class ID", "Just modified!");
+		}
+	}
+	else if (flow_tab) {
+		if (jsonObject.value(action->text()).toString() != QString())
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, jsonObject.value(action->text()).toString()/*action->text()*/);
+		else if (action->text().indexOf("example") == 0)
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text()/*action->text()*/);
+		else
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes);
 	}
 }
 
 void MainWindow::updateDivClassID(QAction* action)
 {
 	action->setChecked(true);
+	//QMessageBox::about(NULL, "QAction", action->text());
 	FlowTab *flow_tab = GetCurrentFlowTab();
-	if (flow_tab) {
-		flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text());
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(m_divClassIDs.toUtf8());
+	QJsonObject jsonObject = jsonDocument.object();
+	if (action->text() == tr("custom")) {
+		SetClassID setClassId("div", m_menuLength, m_divClassIDs);
+		connect(&setClassId, SIGNAL(classIDChanged(QString, QString)), this, SLOT(classIDChanged(QString, QString)));
+		if (setClassId.exec() == QDialog::Accepted) {
+			QMessageBox::about(NULL, "DIV Class ID", "Just modified!");
+		}
+	}
+	else if (flow_tab) {
+		if (jsonObject.value(action->text()).toString() != QString())
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, jsonObject.value(action->text()).toString()/*action->text()*/);
+		else if (action->text().indexOf("example") == 0)
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text()/*action->text()*/);
+		else
+			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes);
 	}
 }
 

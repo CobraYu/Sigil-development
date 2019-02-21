@@ -244,6 +244,7 @@ public slots:
 
     void ResourcesAddedOrDeleted();
 
+	void classIDChanged(QString tagName, QString json);
 
 signals:
     void SettingsChanged();
