@@ -2346,7 +2346,7 @@
     <string>Normal Plus</string>
    </property>
    <property name="toolTip">
-    <string notr="true">&lt;p&gt; with  class</string>
+    <string notr="true">&amp;lt;p&amp;gt; with class=...</string>
    </property>
   </action>
   <action name="actionHeadingSpan_Plus">
@@ -2361,7 +2361,7 @@
     <string>Span Plus</string>
    </property>
    <property name="toolTip">
-    <string notr="true">&lt;span&gt; with class</string>
+    <string notr="true">&amp;lt;span&amp;gt;  with class=...</string>
    </property>
   </action>
   <action name="actionHeadingDiv_Plus">
@@ -2376,7 +2376,7 @@
     <string>Div Plus</string>
    </property>
    <property name="toolTip">
-    <string notr="true">&lt;div&gt; with class</string>
+    <string notr="true">&amp;lt;div&amp;gt; with class=...</string>
    </property>
   </action>
   <action name="actionColorDialog">

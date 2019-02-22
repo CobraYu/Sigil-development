@@ -5536,7 +5536,7 @@ void MainWindow::updateSpanClassID(QAction* action)
 	else if (flow_tab) {
 		if (jsonObject.value(action->text()).toString() != QString()) {
 			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, jsonObject.value(action->text()).toString()/*action->text()*/);
-			action->menu()->setToolTip(QString("<span class=\"").append(jsonObject.value(action->text()).toString()).append("\"></span> \n自訂快捷鍵:"));
+			ui.actionHeadingSpan_Plus->setToolTip(QString("<pre>&lt;span class=&quot;").append(jsonObject.value(action->text()).toString()).append("&quot;&gt;&lt;/span&gt;</pre>"));
 		}
 		else if (action->text().indexOf("example") == 0)
 			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text()/*action->text()*/);
@@ -5562,7 +5562,7 @@ void MainWindow::updateDivClassID(QAction* action)
 	else if (flow_tab) {
 		if (jsonObject.value(action->text()).toString() != QString()) {
 			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, jsonObject.value(action->text()).toString()/*action->text()*/);
-			action->menu()->setToolTip(QString("<div class=\"").append(jsonObject.value(action->text()).toString()).append("\"></div> \n自訂快捷鍵:"));
+			ui.actionHeadingDiv_Plus->setToolTip(QString("<pre>&lt;div class=&quot;").append(jsonObject.value(action->text()).toString()).append("&quot;&gt;&lt;/div&gt;</pre>"));
 		}
 		else if (action->text().indexOf("example") == 0)
 			flow_tab->HeadingStyle(action->iconText(), m_preserveHeadingAttributes, action->text()/*action->text()*/);
